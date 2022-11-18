@@ -17,6 +17,7 @@ from scipy import stats
 import warnings
 import os
 
+plt.rcParams.update({'font.size': 20})
 np.seterr(all='warn')
 _EPS = 1e-6
 
@@ -241,12 +242,10 @@ def delta_init(z):
 
 
 def plot_loss(history, fp):
-    _, ax = plt.subplots()
-    ax2 = ax.twinx()
+    _, ax = plt.subplots(figsize=(16, 9))
+    # ax2 = ax.twinx()
 
-    p1 = ax.plot(history['gen_loss'], label='gen_loss', color='tab:blue')
-    p2 = ax2.plot(history['disc_loss'], label='disc_loss', color='tab:orange')
-
+    p1 = ax.plot(history['gen_loss'], label='Generator Loss', color='tab:blue')
+    p2 = ax.plot(history['disc_loss'], label='Discriminator Loss', color='tab:orange')
     ax.legend(handles=p1+p2)
-    
-    plt.savefig(fp)
+    plt.savefig(fp, bbox_inches='tight')

@@ -64,7 +64,7 @@ class Generator(nn.Module):
         super(Generator, self).__init__()
         self.tcn = nn.ModuleList([TemporalBlock(3, 80, kernel_size=1, stride=1, dilation=1, padding=0),
                                  *[TemporalBlock(80, 80, kernel_size=2, stride=1, dilation=i, padding=i) for i in [1, 2, 4, 8, 16, 32]]])
-        self.last = nn.Conv1d(80, 127, kernel_size=1, stride=1, dilation=1)
+        self.last = nn.Conv1d(80, 1, kernel_size=1, stride=1, dilation=1)
 
     def forward(self, x):
         skip_layers = []
@@ -72,7 +72,7 @@ class Generator(nn.Module):
             skip, x = layer(x)
             skip_layers.append(skip)
         x = self.last(x + sum(skip_layers))
-        return x.permute(0, 2, 1)
+        return x
 
 
 class Discriminator(nn.Module):

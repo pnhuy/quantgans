@@ -32,7 +32,6 @@ class DataProcessor:
 
     def postprocess(self, y):
         standardScaler1, gaussianize, standardScaler2 = self.pipeline[0], self.pipeline[1], self.pipeline[2]
-        y = y[:, :, 0]
         y = (y - y.mean(axis=0))/y.std(axis=0)
         y = standardScaler2.inverse_transform(y)
         y = np.array([gaussianize.inverse_transform(np.expand_dims(x, 1)) for x in y]).squeeze()

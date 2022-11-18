@@ -8,9 +8,15 @@ This repository demostrates the paper: [Wiese et al., Quant GANs: Deep Generatio
 
 Please the notebook [QuantGans](QuantGANs.ipynb) for detail of the model.
 
-## Install the requirements
+My work adapts many parts of these awesome repository:
+* [JamesSullivan/temporalCN](https://github.com/JamesSullivan/temporalCN)
+* [ICascha/QuantGANs-replication](https://github.com/ICascha/QuantGANs-replication)
+
+## Prepare the environment
 
 ```
+$ python -m venv venv
+$ source venv/bin/activate
 $ pip install -r requirements.txt
 ```
 
@@ -32,9 +38,11 @@ $ python inference.py
 
 ![](logs/training_loss.png)
 
-### The cumalative log return
+### Generated Log return
 
-![](logs/cumalative_log_return.png)
+![](logs/log_return.png)
+
+![](logs/cumulative_log_return.png)
 
 ### The comparison between Real vs Synthetic lag
 

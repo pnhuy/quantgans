@@ -18,13 +18,13 @@ torch.manual_seed(SEED)
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data_path', type=str, required=True)
+    parser.add_argument('--data_path', type=str, default='sample/sp500.csv')
     parser.add_argument('--num_epochs', type=int, default=100)
     parser.add_argument('--nz', type=int, default=3)
-    parser.add_argument('--batch_size', type=int, default=80)
+    parser.add_argument('--batch_size', type=int, default=128)
     parser.add_argument('--seq_len', type=int, default=127)
     parser.add_argument('--clip', type=float, default=0.01)
-    parser.add_argument('--lr', type=int, default=0.0002)
+    parser.add_argument('--lr', type=int, default=1e-5)
     parser.add_argument('--train_gen_per_epoch', type=int, default=5)
     parser.add_argument('--device', type=str, default=None)
     parser.add_argument('--log_dir', type=str, default='./logs')
@@ -58,23 +58,26 @@ def train(args=None):
     # Initialize the generator and discriminator
     generator = Generator().to(device)
     discriminator = Discriminator(seq_len).to(device)
-    
+
     # Setup the optimizer
     disc_optimizer = optim.RMSprop(discriminator.parameters(), lr=lr)
     gen_optimizer = optim.RMSprop(generator.parameters(), lr=lr)
 
     # Training loop
     for epoch in progressing_bar:
-        progressing_bar.set_description('Epoch %d' % (epoch))
-
+        progressing_bar.set_description('Epoch %d' % (epoch+1))
+        total_gen_loss = 0
+        total_disc_loss = 0
+        counter = 0
+        
         for idx, data in enumerate(dataloader, 0):
+            counter += 1
             
             # Train the discriminator
             discriminator.zero_grad()
             real = data.to(device)
-            batch_size, seq_len = real.size(0), real.size(1)
             noise = torch.randn(batch_size, nz, seq_len, device=device)
-            fake = generator(noise).detach()
+            fake = generator(noise) # .detach()
 
             disc_loss = -torch.mean(discriminator(real)) + torch.mean(discriminator(fake))
             disc_loss.backward()
@@ -88,11 +91,17 @@ def train(args=None):
                 generator.zero_grad()
                 gen_loss = -torch.mean(discriminator(generator(noise)))
                 gen_loss.backward()
-                gen_optimizer.step()   
-
-            history['gen_loss'].append(gen_loss.item())
-            history['disc_loss'].append(disc_loss.item())
-        progressing_bar.set_postfix_str('DiscLoss: %.4e, GenLoss: %.4e' % (disc_loss.item(), gen_loss.item()))
+                gen_optimizer.step()
+            
+            total_gen_loss += gen_loss.item()
+            total_disc_loss += disc_loss.item()
+        
+        total_gen_loss /= counter
+        total_disc_loss /= counter
+        
+        history['gen_loss'].append(total_gen_loss)
+        history['disc_loss'].append(total_disc_loss)
+        progressing_bar.set_postfix_str('DiscLoss: %.4e, GenLoss: %.4e' % (total_gen_loss, total_disc_loss))
         
     plot_loss(history, os.path.join(args.log_dir, 'training_loss.png'))
     joblib.dump(data_processor, os.path.join(args.log_dir, 'data_processor.joblib'))
