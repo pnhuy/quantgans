@@ -1,6 +1,12 @@
 # Quant GANs
 
+Student: Huy Pham
+
+Email: nfam_2@edu.hse.ru
+
 This repository demostrates the paper: [Wiese et al., Quant GANs: Deep Generation of Financial Time Series, 2019](https://arxiv.org/pdf/1907.06673.pdf)
+
+Please the notebook [QuantGans][QuantGANs.ipynb] for detail of the model.
 
 ## Install the requirements
 
