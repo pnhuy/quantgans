@@ -100,7 +100,7 @@ def infer(args):
         ax.grid(True)
         ax.axhline(y=0, color='k')
         ax.axvline(x=0, color='k')
-    plt.setp(axs, xlabel='Lag (number of days')
+    plt.setp(axs, xlabel='Lag (number of days)')
     plt.savefig(os.path.join(args.log_dir, 'real_vs_synthetic_lag.png'))
 
 if __name__ == '__main__':

@@ -56,7 +56,7 @@ def train(args=None):
     history = dict(gen_loss=[], disc_loss=[])
 
     # Initialize the generator and discriminator
-    generator = Generator(seq_len=seq_len).to(device)
+    generator = Generator().to(device)
     discriminator = Discriminator(seq_len).to(device)
     
     # Setup the optimizer
