@@ -36,7 +36,7 @@ def infer(args):
         device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     data_processor = joblib.load(os.path.join(args.log_dir, 'data_processor.joblib'))
-    generator = torch.load(os.path.join(args.log_dir, 'generator.pth')).to(device)
+    generator = torch.load(os.path.join(args.log_dir, 'generator.pth'), map_location=device)
     generator.eval()
     
     seq_len = args.seq_len or len(data_processor.log_returns)
