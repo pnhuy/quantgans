@@ -2,6 +2,8 @@
 
 Student: [Huy Pham](mailto:nfam_2@edu.hse.ru)
 
+This is my assignment for the course Deep Generative Models (HSE MDS).
+
 This repository demostrates the paper: [Wiese et al., Quant GANs: Deep Generation of Financial Time Series, 2019](https://arxiv.org/pdf/1907.06673.pdf)
 
 Please see the notebook [QuantGans](QuantGANs.ipynb) for detail of the model.
